@@ -38,12 +38,13 @@ for(const file of command_files){
 client.on('messageCreate', message =>{
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
-	if(message.mentions.members.first() == message.guild.members.cache.get("888196466269642752")){
+	if(message.mentions.members.first().catch == message.guild.members.cache.get("888196466269642752")){
+		if(db.get(`already_warned_${message.author.id}`) === null) db.set(`already_warned_${message.author.id}`, false);
 		if(message.channel === message.guild.channels.cache.get("772130040389304340")){
 		  message.reply("FRIK OFF LIL SUSSY BAKA <3");
 		} else{
-		  if(!db.get(`already_warned_${message.mentions.members.first().id}`)) return; else{
-				db.set(`already_warned_${message.mentions.members.first().id}`, true)
+		  if(db.get(`already_warned_${message.author.id}`)) return; else{
+				db.set(`already_warned_${message.author.id}`, true)
 			  const spam = message.guild.channels.cache.get("772130040389304340");
 			  message.channel.send(`IF YOU WANT ME TO SAY "FRIK OFF", DO IT IN ${spam} PLS UwU`)
 			}
