@@ -36,18 +36,17 @@ for(const file of command_files){
 }
 //message creation event
 client.on('messageCreate', message =>{
+  if(!message.guild) return;
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const command = args.shift().toLowerCase();
-	if(message.mentions.members.first().catch == message.guild.members.cache.get("888196466269642752")){
-		if(db.get(`already_warned_${message.author.id}`) === null) db.set(`already_warned_${message.author.id}`, false);
+	if(message.mentions.members.first() == message.guild.members.cache.get("888196466269642752")){
 		if(message.channel === message.guild.channels.cache.get("772130040389304340")){
 		  message.reply("FRIK OFF LIL SUSSY BAKA <3");
 		} else{
-		  if(db.get(`already_warned_${message.author.id}`)) return; else{
-				db.set(`already_warned_${message.author.id}`, true)
-			  const spam = message.guild.channels.cache.get("772130040389304340");
-			  message.channel.send(`IF YOU WANT ME TO SAY "FRIK OFF", DO IT IN ${spam} PLS UwU`)
-			}
+			  message.author.send(`IF YOU WANT ME TO SAY "FRIK OFF", DO IT IN #bot-commands-and-spam PLS UwU`).catch(error =>{
+				  return;
+			  });
+			
 		  }
 		}
 	//I had to put that != null check because the bot kept crashing due to the guild id being null for some reason
@@ -59,7 +58,6 @@ client.on('messageCreate', message =>{
 		db.add(`message_num_${message.guild.id}`, 1)
 		}
 	}
-	if(!message.guild) return;
 	if(message.author.bot)return;
 	if(!message.content.startsWith(prefix)) return;
 	const command_name = client.commands.get(command);
@@ -85,4 +83,4 @@ client.on('guildMemberUpdate', (oldMember, newMember)=>{
 		channel.send(`Welcome to the MVPerry Discord Server, ${newMember.user}, Please read the ${rules} if you haven't done already! I hope you enjoy you experience in this server!!`)
 	}
 });
-client.login(Process.env.TOKEN)
+client.login(process.env.TOKEN)
