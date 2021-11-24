@@ -1,1 +1,7 @@
 node_modules
+json.sqlite
+deploy_commands.js
+.env
+package.json
+package-lock.json
+seth.jpg
