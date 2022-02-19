@@ -16,12 +16,13 @@ app.createServer((req, res) => {
          res.end();
     })
   }
-}).listen('3001', () => console.log(`listening at http://localhost:${port}`));
+}).listen('3000', () => console.log(`listening at http://localhost:${port}`));
 
 //--------------------------------BOT CODE START------------------------------
 
 const {Client, Intents, Collection} = require('discord.js')
 const{prefix} = require('./config.json')
+const anilist = require('myanimelist-api');
 const db = require('quick.db')
 const command_files = fs.readdirSync("./commands").filter(file => file.endsWith(".js"))
 const client = new Client({intents:[Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES,
@@ -43,12 +44,19 @@ client.on('messageCreate', message =>{
 		if(message.channel === message.guild.channels.cache.get("772130040389304340")){
 		  message.reply("FRIK OFF LIL SUSSY BAKA <3");
 		} else{
-			  message.author.send(`IF YOU WANT ME TO SAY "FRIK OFF", DO IT IN #bot-commands-and-spam PLS UwU`).catch(error =>{
+        const spam = message.guild.channels.cache.get("772130040389304340")
+			  message.author.send(`IF YOU WANT ME TO SAY "FRIK OFF", DO IT IN ${spam} PLS UwU`).catch(error =>{
 				  return;
 			  });
 			
 		  }
 		}
+  if(message.channel == message.guild.channels.cache.get("817659114515464203")){
+    const regex = message.content.match(/^\"?(.+)\"$/);
+    if(regex != null){
+      message.channel.send(regex[1])
+    }
+  }
 	//I had to put that != null check because the bot kept crashing due to the guild id being null for some reason
 	if(message.guild.id != null){
 		if(db.get(`message_num_${message.guild.id}`) == null){
@@ -58,7 +66,7 @@ client.on('messageCreate', message =>{
 		db.add(`message_num_${message.guild.id}`, 1)
 		}
 	}
-	if(message.author.bot)return;
+	if(message.author.bot) return;
 	if(!message.content.startsWith(prefix)) return;
 	const command_name = client.commands.get(command);
 	if(!command_name) return;
